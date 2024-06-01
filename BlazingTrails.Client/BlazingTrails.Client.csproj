@@ -11,14 +11,15 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.30" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.30" PrivateAssets="all" />
 		<PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BlazingTrails.Shared\BlazingTrails.Shared.csproj"/>
 	</ItemGroup>
 
 	<ItemGroup>
 		<Watch Include="**/*.scss" />
-		<Watch Remove="Features\Home\SearchFilter.razor.scss" />
-		<Watch Remove="Features\Home\TrailSearch.razor.scss" />
-		<Watch Remove="Features\ManageTrails\FormSection.razor.scss" />
-		<ProjectReference Include="..\BlazingTrails.Shared\BlazingTrails.Shared.csproj" />
 		<None Update="**/*.css" Watch="false" />
 	</ItemGroup>
 

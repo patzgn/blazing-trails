@@ -12,7 +12,6 @@ builder.Services.AddDbContext<BlazingTrailsContext>(options =>
 );
 
 builder.Services.AddControllers();
-//.AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.Load("BlazingTrails.Shared")));
 
 builder.Services.AddFluentValidationAutoValidation()
 				.AddFluentValidationClientsideAdapters()
