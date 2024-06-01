@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BlazingTrails.Shared\BlazingTrails.Shared.csproj"/>
+		<ProjectReference Include="..\BlazingTrails.Shared\BlazingTrails.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
