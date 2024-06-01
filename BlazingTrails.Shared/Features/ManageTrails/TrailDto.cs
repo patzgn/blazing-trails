@@ -36,6 +36,10 @@ public class TrailValidator : AbstractValidator<TrailDto>
 			.NotEmpty()
 			.WithMessage("Please enter a location");
 
+		RuleFor(x => x.TimeInMinutes)
+			.GreaterThan(0)
+			.WithMessage("Please enter a time");
+
 		RuleFor(x => x.Length)
 			.GreaterThan(0)
 			.WithMessage("Please enter a length");
