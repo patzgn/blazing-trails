@@ -1,6 +1,7 @@
 ﻿@using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @implements IAsyncDisposable
+@implements IDisposable
 
 <div class="map-wrapper">
 	<div class="controls">
@@ -14,6 +15,7 @@
 @code {
 	private ElementReference _map;
 	private IJSObjectReference? _routeMapModule;
+	private DotNetObjectReference<RouteMap> _routeMapReference;
 
 	[Parameter]
 	public string Height { get; set; } = "500px";
@@ -26,7 +28,9 @@
 		if (firstRender)
 		{
 			_routeMapModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazingTrails.ComponentLibrary/Map/RouteMap.razor.js");
-			await _routeMapModule.InvokeVoidAsync("initialize", _map);
+			_routeMapReference = DotNetObjectReference.Create(this);
+
+			await _routeMapModule.InvokeVoidAsync("initialize", _map, _routeMapReference);
 		}
 	}
 
@@ -38,6 +42,13 @@
 			Console.WriteLine(message);
 		}
 	}
+
+	[JSInvokable]
+	public void WaypointAdded(decimal latitude, decimal longitude)
+		=> Console.WriteLine($"Added Waypoint - Latitude: {latitude}, Longitude {longitude}");
+
+	void IDisposable.Dispose()
+		=> _routeMapReference?.Dispose();
 
 	async ValueTask IAsyncDisposable.DisposeAsync()
 	{
