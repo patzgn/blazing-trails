@@ -8,5 +8,7 @@ public class GetTrailsRequest : IRequest<GetTrailsRequest.Response>
 
 	public record Response(IEnumerable<Trail> Trails);
 
-	public record Trail(int Id, string Name, string? Image, string Location, int TimeInMinutes, int Length, string Description);
+	public record Trail(int Id, string Name, string? Image, string Location, int TimeInMinutes, int Length, string Description, List<Waypoint> Waypoints);
+
+	public record Waypoint(decimal Latitude, decimal Longitude);
 }
