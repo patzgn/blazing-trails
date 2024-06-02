@@ -21,7 +21,7 @@ public class EditTrailEndpoint : EndpointBaseAsync.WithRequest<EditTrailRequest>
 	public override async Task<ActionResult<bool>> HandleAsync(EditTrailRequest request, CancellationToken cancellationToken = default)
 	{
 		var trail = await _context.Trails
-			.Include(x => x.Route)
+			.Include(x => x.Waypoints)
 			.SingleOrDefaultAsync(x => x.Id == request.Trail.Id, cancellationToken);
 
 		if (trail is null)
@@ -34,11 +34,10 @@ public class EditTrailEndpoint : EndpointBaseAsync.WithRequest<EditTrailRequest>
 		trail.Location = request.Trail.Location;
 		trail.TimeInMinutes = request.Trail.TimeInMinutes;
 		trail.Length = request.Trail.Length;
-		trail.Route = request.Trail.Route.Select(ri => new RouteInstruction
+		trail.Waypoints = request.Trail.Waypoints.Select(wp => new Waypoint
 		{
-			Stage = ri.Stage,
-			Description = ri.Description,
-			Trail = trail
+			Latitude = wp.Latitude,
+			Longitude = wp.Longitude,
 		}).ToList();
 
 		if (request.Trail.ImageAction == ImageAction.Remove)

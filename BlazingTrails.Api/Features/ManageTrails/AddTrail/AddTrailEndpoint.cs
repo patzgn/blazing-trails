@@ -8,38 +8,33 @@ namespace BlazingTrails.Api.Features.ManageTrails.AddTrail;
 
 public class AddTrailEndpoint : EndpointBaseAsync.WithRequest<AddTrailRequest>.WithActionResult<int>
 {
-    private readonly BlazingTrailsContext _database;
+	private readonly BlazingTrailsContext _database;
 
-    public AddTrailEndpoint(BlazingTrailsContext database)
-    {
-        _database = database;
-    }
+	public AddTrailEndpoint(BlazingTrailsContext database)
+	{
+		_database = database;
+	}
 
-    [HttpPost(AddTrailRequest.RouteTemplate)]
-    public override async Task<ActionResult<int>> HandleAsync(AddTrailRequest request, CancellationToken cancellationToken = default)
-    {
-        var trail = new Trail
-        {
-            Name = request.Trail.Name,
-            Description = request.Trail.Description,
-            Location = request.Trail.Location,
-            TimeInMinutes = request.Trail.TimeInMinutes,
-            Length = request.Trail.Length,
-        };
+	[HttpPost(AddTrailRequest.RouteTemplate)]
+	public override async Task<ActionResult<int>> HandleAsync(AddTrailRequest request, CancellationToken cancellationToken = default)
+	{
+		var trail = new Trail
+		{
+			Name = request.Trail.Name,
+			Description = request.Trail.Description,
+			Location = request.Trail.Location,
+			TimeInMinutes = request.Trail.TimeInMinutes,
+			Length = request.Trail.Length,
+			Waypoints = request.Trail.Waypoints.Select(wp => new Waypoint
+			{
+				Latitude = wp.Latitude,
+				Longitude = wp.Longitude,
+			}).ToList()
+		};
 
-        await _database.Trails.AddAsync(trail, cancellationToken);
+		await _database.Trails.AddAsync(trail, cancellationToken);
+		await _database.SaveChangesAsync(cancellationToken);
 
-        var routeInstructions = request.Trail.Route.Select(x => new RouteInstruction
-        {
-            Stage = x.Stage,
-            Description = x.Description,
-            Trail = trail
-        });
-
-        await _database.RouteInstructions.AddRangeAsync(routeInstructions, cancellationToken);
-
-        await _database.SaveChangesAsync(cancellationToken);
-
-        return Ok(trail.Id);
-    }
+		return Ok(trail.Id);
+	}
 }
